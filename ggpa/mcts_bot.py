@@ -37,6 +37,10 @@ class TreeNode:
     # REQUIRED function (implementation optional, but *very* helpful for debugging)
     # Called after all iterations when the -v command line parameter is present
     def print_tree(self, indent = 0):
+        for child in self.children:
+            for i in range(indent):
+                print(" ")
+            print(self, self.results)
         pass
 
 
@@ -46,17 +50,32 @@ class TreeNode:
     # Otherwise, pick a child node according to your selection criterion (e.g. UCB-1)
     # apply its action to the state and recursively call select on that child node.
     def select(self, state):
+        actions = state.get_actions()
+        missing_children = {}
+        if len(self.children) == 0:
+            self.expand(actions)
+        else:
+            for action in actions:
+                if action not in self.children:
+                    missing_children.append(action);
+            self.expand(missing_children)
         pass
 
     # RECOMMENDED: expand takes the available actions, and picks one at random,
     # adds a child node corresponding to that action, applies the action ot the state
     # and then calls rollout on that new node
     def expand(self, state, available):
+        action = random.choice(available)
+        n = TreeNode(action, self.param, parent=self)
+        expansion_state = state.copy_undeterministic
+        expansion_state.step(action)
+        self.rollout(n, expansion_state)
         pass 
 
     # RECOMMENDED: rollout plays the game randomly until its conclusion, and then 
     # calls backpropagate with the result you get 
     def rollout(self, state):
+        back_propogate(self.parent, result)
         pass
         
     # RECOMMENDED: backpropagate records the score you got in the current node, and 
@@ -64,6 +83,8 @@ class TreeNode:
     # If you record scores in a list, you can use sum(self.results)/len(self.results)
     # to get an average.
     def backpropagate(self, result):
+        self.results.append(result)
+        backpropagate(self.parent, result)
         pass
         
     # RECOMMENDED: You can start by just using state.score() as the actual value you are 
