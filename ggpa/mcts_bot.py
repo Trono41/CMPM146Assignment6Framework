@@ -137,7 +137,7 @@ class TreeNode:
     # optimizing; for the challenge scenario, in particular, you may want to experiment
     # with other options (e.g. squaring the score, or incorporating state.health(), etc.)
     def score(self, state): 
-        return state.score()
+        return state.score() * state.health()
         
         
 # You do not have to modify the MCTS Agent (but you can)
